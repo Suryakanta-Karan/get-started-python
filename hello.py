@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 import atexit
 import os
 import json
+from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__, static_url_path='')
 
@@ -36,7 +37,7 @@ elif os.path.isfile('vcap-local.json'):
 
 # On IBM Cloud Cloud Foundry, get the port number from the environment variable PORT
 # When running this app on the local machine, default the port to 8000
-port = int(os.getenv('PORT', 8000))
+port = int(os.getenv('PORT', 5000))
 
 @app.route('/')
 def root():
@@ -86,3 +87,6 @@ def shutdown():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port, debug=True)
+    #http_server = WSGIServer(('', 5000), app)
+    #app.run()
+    #http_server.serve_forever()
